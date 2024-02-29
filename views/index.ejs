@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="styles/main.css">
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Weather App</title>
+</head>
+<body class="bg-light">
+  <div class="container">
+    <div class="search-container">
+      <form class="search-form shadow" action="/city-temp" method="POST">
+        <input type="text" name="city" placeholder="Search a city">
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+    </div>
+
+    <div class="container w-75 my-5 bg-white">
+      <div class="forecast-today row p-4 pb-0 align-items-center rounded-4 border shadow">
+        <div class="forecast-today-header">
+          <h1><%= data.name %></h1>
+          <p><%= date %></p>
+        </div>
+
+        <div class="forecast-today-info container d-flex flex-wrap justify-content-evenly align-items-center d-md-flex mb-4 mb-lg-3">
+          <div class="weather-condition">
+            <img class="big-icon" src="https://openweathermap.org/img/wn/<%= data.weather[0].icon %>@2x.png" />
+            <p><%= weatherCondition %></p>
+          </div>
+          <div class="weather-temp">
+            <h2><%= temperature %>°</h2>
+          </div>
+          <div class="weather-data">
+            <div class="humidity">
+              <svg class="small-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0h1.8c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z"/></svg>
+              <p><%= data.main.humidity %>%</p>
+            </div>
+            <div class="wind-speed">
+              <svg class="small-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 32c0 17.7 14.3 32 32 32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H352c53 0 96-43 96-96s-43-96-96-96H320c-17.7 0-32 14.3-32 32zm64 352c0 17.7 14.3 32 32 32h32c53 0 96-43 96-96s-43-96-96-96H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-17.7 0-32 14.3-32 32zM128 512h32c53 0 96-43 96-96s-43-96-96-96H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H160c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32 14.3-32 32s14.3 32 32 32z"/></svg>
+              <p><%= data.wind.speed %> km/s</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="six-days-forecast container d-flex flex-wrap align-items-start">
+      <% sixDaysData.forEach((forecastDay, index) => { %>
+          <% if (index < 6) { %>
+      
+      <div class="day-forecast">
+          <% let hours = new Date(forecastDay.dt * 1000).getHours() %>
+          <% let newFormat = hours >= 12 ? 'PM' : 'AM'; %>
+          <% hours = hours % 12; %>
+          <% hours = hours ? hours : 12; %>
+          <% let time = hours + " " + newFormat %>
+        <h5><%= time %></h5>
+
+        <img class="mid-icon" src="https://openweathermap.org/img/wn/<%= forecastDay.weather[0].icon %>@2x.png" />
+
+        <div class="day-temp">
+            <% let maxTemp = Math.round(forecastDay.main.temp_max) %>
+            <% let minTemp = Math.round(forecastDay.main.temp_min) %>
+          <p class="high-temp"><%= maxTemp %>°</p>
+          <p class="low-temp"><%= minTemp %>°</p>
+        </div>
+        
+        <p><%= forecastDay.weather[0].description %></p>
+      </div>
+          <% } %>
+        <% }); %>
+    </div>
+  </div>
+    <div class="container">
+      <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3"></ul>
+        <p class="text-center text-body-secondary">This project was coded by Angelica Roque and it's open sourced on GitHub.</p>
+      </footer>
+    </div>
+</body>
+</html>
